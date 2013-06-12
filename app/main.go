@@ -1,7 +1,7 @@
 package main
 
 import (
-    "assignment4/graph"
+    "github.com/mattomatic/kosaraju/graph"
     "fmt"
     "flag"
     "sort"
@@ -12,7 +12,7 @@ func topN(items []int, n int) ([]int) {
 	result := make([]int, n)
 	sort.Ints(items)
 	
-	for i := 0; i < len(items) && i < n; i++ {
+	for i := 0; i < len(items); i++ {
 		result[i] = items[i]
 	}
 	
@@ -34,8 +34,7 @@ func main() {
 	graphTimer := time.Now().Sub(graphTime)
 
     sccTime := time.Now()
-    ch := make(chan *graph.Graph)
-    go g.Kosaraju(ch)
+    ch := g.Kosaraju()
 
     lengths := make([]int, 0)
     for scc := range ch {
@@ -43,7 +42,7 @@ func main() {
     }
     sccTimer := time.Now().Sub(sccTime)
     
-    answer := topN(lengths, 5)
+    answer := topN(lengths, len(lengths))
     fmt.Printf("graphTime: %v\n", graphTimer)
     fmt.Printf("sccTime: %v\n", sccTimer)
     fmt.Printf("answer: %v\n", answer)

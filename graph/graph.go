@@ -62,8 +62,7 @@ func (g *Graph) DFS(ch chan *Node) {
 
 func (g *Graph) Copy() (*Graph) {
     m := NewGraph()
-    edges := make(chan *Edge)
-    go g.GetEdges(edges)
+    edges := g.GetEdges()
     
     for edge := range edges {
         if !m.ContainsIds(edge.src.Id) {
@@ -83,14 +82,20 @@ func (g *Graph) Copy() (*Graph) {
     return m
 }
 
-func (g *Graph) GetEdges(edges chan *Edge) {
-    defer close(edges)
+func (g *Graph) GetEdges() (chan *Edge) {
+    edges := make(chan *Edge)
     
-    for _, node := range g.Nodes {
-        for _, next := range node.Nodes {
-            edges <- &Edge{node, next}
+    go func() {
+        defer close(edges)
+        
+        for _, node := range g.Nodes {
+            for _, next := range node.Nodes {
+                edges <- &Edge{node, next}
+            }
         }
-    }
+    }()        
+    
+    return edges
 }
 
 // Reverse all the edges in a graph

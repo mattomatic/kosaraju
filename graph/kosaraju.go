@@ -1,6 +1,12 @@
 package graph
 
-func (g *Graph) Kosaraju(ch chan *Graph) {
+func (g *Graph) Kosaraju() (chan *Graph) {
+    ch := make(chan *Graph)
+    go kosaraju(g, ch)
+    return ch
+}
+
+func kosaraju(g *Graph, ch chan *Graph) {
 	defer close(ch)
 
 	// Get the finishing ordering of the nodes
@@ -10,10 +16,10 @@ func (g *Graph) Kosaraju(ch chan *Graph) {
 	for _, node := range ordering {
 		g := NewGraph()
 		addFromDFS(g, node)
-
+		
 		if len(g.Nodes) > 0 {
-			ch <- g
-		}
+            ch <- g
+        }
 	}
 }
 

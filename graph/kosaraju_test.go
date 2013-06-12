@@ -22,12 +22,10 @@ func TestKosaraju(t *testing.T) {
 	f.AddEdges(d)
 
 	g := NewGraph(a, b, c, d, e, f)
-	ch := make(chan *Graph)
 
-	go g.Kosaraju(ch)
-
-	scc1 := <-ch
-	scc2 := <-ch
+	sccs := g.Kosaraju()
+	scc1 := <-sccs
+	scc2 := <-sccs
 
 	if !isComponent(scc1, d, e, f) {
 		t.Error()
@@ -59,12 +57,9 @@ func TestKosarajuTwo(t *testing.T) {
 	a.AddEdges(f)
 
 	g := NewGraph(a, b, c, d, e, f)
-	ch := make(chan *Graph)
-
-	go g.Kosaraju(ch)
-
-	scc1 := <-ch
-	scc2 := <-ch
+	sccs := g.Kosaraju()
+	scc1 := <-sccs
+	scc2 := <-sccs
 
 	if !isComponent(scc1, d, e, f) {
 		t.Error()

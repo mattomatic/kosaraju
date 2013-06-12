@@ -28,7 +28,11 @@ func loadLines(filename string, ch chan string) {
 	r := bufio.NewReader(f)
 
 	for line, _, err := r.ReadLine(); err != io.EOF; line, _, err = r.ReadLine() {
-		ch <- string(line)
+	    s := string(line)
+	    
+	    if !strings.HasPrefix(s, "#") {
+		    ch <- s
+		}
 	}
 }
 
