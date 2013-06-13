@@ -34,10 +34,10 @@ func main() {
 	graphTimer := time.Now().Sub(graphTime)
 
 	sccTime := time.Now()
-	ch := g.Kosaraju()
+	sccs := g.Kosaraju()
 
 	lengths := make([]int, 0)
-	for scc := range ch {
+	for scc := range sccs {
 		lengths = append(lengths, len(scc.Nodes))
 	}
 	sccTimer := time.Now().Sub(sccTime)
