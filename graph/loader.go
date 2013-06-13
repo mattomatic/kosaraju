@@ -2,47 +2,36 @@ package graph
 
 import (
 	"bufio"
-	"io"
 	"os"
-	"strconv"
-	"strings"
+	"fmt"
 )
 
 func LoadGraph(filename string) *Graph {
-	g := NewGraph()
-	ch := make(chan string)
+    fp, _ := os.Open(filename)
+    reader := bufio.NewReader(fp)
+    g := NewGraph()    
+    readHeader(reader)
+    var src, dst int
 
-	go loadLines(filename, ch)
-
-	for line := range ch {
-		loadLine(g, line)
-	}
-
-	return g
+    for scanLine(reader, &src, &dst) {
+        srcNode := getOrCreate(g, src)
+        dstNode := getOrCreate(g, dst)
+        srcNode.AddEdges(dstNode)
+    }
+    
+    return g
 }
 
-func loadLines(filename string, ch chan string) {
-	defer close(ch)
-
-	f, _ := os.Open(filename)
-	r := bufio.NewReader(f)
-
-	for line, _, err := r.ReadLine(); err != io.EOF; line, _, err = r.ReadLine() {
-		s := string(line)
-
-		if !strings.HasPrefix(s, "#") {
-			ch <- s
-		}
-	}
+func scanLine(reader *bufio.Reader, src *int, dst *int) (bool) {
+    n, err := fmt.Fscanf(reader, "%d %d\n", src, dst)
+    return n == 2 && err == nil
 }
 
-func loadLine(g *Graph, line string) {
-	fields := strings.Split(line, " ")
-	srcId, _ := strconv.Atoi(fields[0])
-	dstId, _ := strconv.Atoi(fields[1])
-	srcNode := getOrCreate(g, srcId)
-	dstNode := getOrCreate(g, dstId)
-	srcNode.AddEdges(dstNode)
+func readHeader(reader *bufio.Reader) {
+    b, _ := reader.Peek(1)
+    if b[0] == '#' {
+        reader.ReadLine()
+    }
 }
 
 func getOrCreate(g *Graph, id int) *Node {
