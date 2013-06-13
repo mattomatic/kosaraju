@@ -14,57 +14,6 @@ func TestGraphSimple(t *testing.T) {
 	}
 }
 
-func TestDFS(t *testing.T) {
-	a := NewNode(1)
-	b := NewNode(2)
-	c := NewNode(3)
-	d := NewNode(4)
-	e := NewNode(5)
-
-	a.AddEdges(b, e)
-	b.AddEdges(c, d)
-	c.AddEdges(a) // add a cycle, just because
-
-	g := NewGraph(a, b, c, d, e)
-
-	ch := make(chan *Node)
-
-	go g.DFS(ch)
-
-	if !checkOrdering(ch, a, b, c, d, e) {
-		t.Error()
-	}
-
-	if !(len(ch) == 0) {
-		t.Error()
-	}
-}
-
-func TestReset(t *testing.T) {
-	a := NewNode(1)
-	b := NewNode(2)
-	c := NewNode(3)
-
-	a.AddEdges(b)
-	b.AddEdges(c)
-	c.AddEdges(a)
-
-	g := NewGraph(a, b, c)
-
-	ch := make(chan *Node)
-
-	go g.DFS(ch)
-	if !checkOrdering(ch, a, b, c) {
-		t.Error()
-	}
-
-	ch = make(chan *Node)
-	go g.DFS(ch)
-	if !checkOrdering(ch, a, b, c) {
-		t.Error()
-	}
-}
-
 func TestReverse(t *testing.T) {
 	a := NewNode(1)
 	b := NewNode(2)
