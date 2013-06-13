@@ -50,15 +50,7 @@ func (g *Graph) Contains(nodes ...*Node) bool {
 	return true
 }
 
-// Perform a depth-first search of the graph
-func (g *Graph) DFS(ch chan *Node) {
-	defer close(ch)
-	g.Reset()
 
-	for _, node := range g.Nodes {
-		dfs(node, ch)
-	}
-}
 
 func (g *Graph) Copy() (*Graph) {
     m := NewGraph()
@@ -104,19 +96,6 @@ func (g *Graph) Reverse() {
 
 	for _, node := range g.Nodes {
 		reverse(node)
-	}
-}
-
-func dfs(n *Node, ch chan *Node) {
-	if n.Visited {
-		return
-	}
-
-	n.Visited = true
-	ch <- n
-
-	for _, next := range n.Nodes {
-		dfs(next, ch)
 	}
 }
 
