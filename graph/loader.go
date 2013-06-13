@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func LoadGraph(filename string) (*Graph) {
+func LoadGraph(filename string) *Graph {
 	g := NewGraph()
 	ch := make(chan string)
 
@@ -18,26 +18,26 @@ func LoadGraph(filename string) (*Graph) {
 		loadLine(g, line)
 	}
 
-    return g
+	return g
 }
 
 func loadLines(filename string, ch chan string) {
-    defer close(ch)
-    
+	defer close(ch)
+
 	f, _ := os.Open(filename)
 	r := bufio.NewReader(f)
 
 	for line, _, err := r.ReadLine(); err != io.EOF; line, _, err = r.ReadLine() {
-	    s := string(line)
-	    
-	    if !strings.HasPrefix(s, "#") {
-		    ch <- s
+		s := string(line)
+
+		if !strings.HasPrefix(s, "#") {
+			ch <- s
 		}
 	}
 }
 
 func loadLine(g *Graph, line string) {
-    fields := strings.Split(line, " ")
+	fields := strings.Split(line, " ")
 	srcId, _ := strconv.Atoi(fields[0])
 	dstId, _ := strconv.Atoi(fields[1])
 	srcNode := getOrCreate(g, srcId)
@@ -45,10 +45,10 @@ func loadLine(g *Graph, line string) {
 	srcNode.AddEdges(dstNode)
 }
 
-func getOrCreate(g *Graph, id int) (*Node) {
-    if !g.ContainsIds(id) {
-        g.AddNodes(NewNode(id))
-    }
-    
-    return g.Nodes[id]
+func getOrCreate(g *Graph, id int) *Node {
+	if !g.ContainsIds(id) {
+		g.AddNodes(NewNode(id))
+	}
+
+	return g.Nodes[id]
 }

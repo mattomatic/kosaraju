@@ -23,22 +23,22 @@ func TestReverse(t *testing.T) {
 	b.AddEdges(c)
 	c.AddEdges(a)
 
-    if !testReverse(a, b, c) {
-        t.Error()
-    }
+	if !testReverse(a, b, c) {
+		t.Error()
+	}
 }
 
 func TestReverseTwo(t *testing.T) {
 	a := NewNode(1)
 	b := NewNode(2)
-    c := NewNode(3)
-    
+	c := NewNode(3)
+
 	a.AddEdges(b)
 	b.AddEdges(a)
 
-    if !testReverse(a, b, c) {
-        t.Error()
-    }
+	if !testReverse(a, b, c) {
+		t.Error()
+	}
 }
 
 func TestReverseThree(t *testing.T) {
@@ -58,9 +58,9 @@ func TestReverseThree(t *testing.T) {
 	f.AddEdges(d)
 	a.AddEdges(d)
 
-    if !testReverse(a, b, c, d, e, f) {
-        t.Error()
-    }
+	if !testReverse(a, b, c, d, e, f) {
+		t.Error()
+	}
 }
 
 func TestReverseFour(t *testing.T) {
@@ -68,36 +68,36 @@ func TestReverseFour(t *testing.T) {
 	b := NewNode(2)
 	c := NewNode(3)
 	d := NewNode(4)
-	
+
 	nodes := []*Node{a, b, c, d}
-	
+
 	for _, n1 := range nodes {
-	    for _, n2 := range nodes {
-	        n1.AddEdges(n2)
-	    }
+		for _, n2 := range nodes {
+			n1.AddEdges(n2)
+		}
 	}
-	
+
 	if !testReverse(nodes...) {
-	    t.Error()
+		t.Error()
 	}
 }
 
-func testReverse(nodes ...*Node) (bool) {
-    forward := NewGraph(nodes...)
-    reverse := forward.Copy()
-    reverse.Reverse()
-    
-    if !isReverseOf(forward, reverse) {
-        return false
-    }
-    
-    reverse.Reverse()
-    
-    if !isEqualTo(forward, reverse) {
-        return false
-    }
-    
-    return true
+func testReverse(nodes ...*Node) bool {
+	forward := NewGraph(nodes...)
+	reverse := forward.Copy()
+	reverse.Reverse()
+
+	if !isReverseOf(forward, reverse) {
+		return false
+	}
+
+	reverse.Reverse()
+
+	if !isEqualTo(forward, reverse) {
+		return false
+	}
+
+	return true
 }
 
 func isReverseOf(lhs *Graph, rhs *Graph) bool {

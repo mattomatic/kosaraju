@@ -5,8 +5,8 @@ type Graph struct {
 }
 
 type Edge struct {
-    src *Node
-    dst *Node
+	src *Node
+	dst *Node
 }
 
 func NewGraph(nodes ...*Node) *Graph {
@@ -25,7 +25,7 @@ func (g *Graph) Reset() {
 	for _, node := range g.Nodes {
 		node.Visited = false
 	}
-}       
+}
 
 func (g *Graph) ContainsIds(ids ...int) bool {
 	for _, id := range ids {
@@ -50,44 +50,42 @@ func (g *Graph) Contains(nodes ...*Node) bool {
 	return true
 }
 
+func (g *Graph) Copy() *Graph {
+	m := NewGraph()
+	edges := g.GetEdges()
 
+	for edge := range edges {
+		if !m.ContainsIds(edge.src.Id) {
+			m.AddNodes(NewNode(edge.src.Id))
+		}
 
-func (g *Graph) Copy() (*Graph) {
-    m := NewGraph()
-    edges := g.GetEdges()
-    
-    for edge := range edges {
-        if !m.ContainsIds(edge.src.Id) {
-            m.AddNodes(NewNode(edge.src.Id))
-        }
-        
-        if !m.ContainsIds(edge.dst.Id) {
-            m.AddNodes(NewNode(edge.dst.Id))
-        }
-        
-        src, _ := m.Nodes[edge.src.Id]
-        dst, _ := m.Nodes[edge.dst.Id]
-        
-        src.AddEdges(dst)
-    }
-    
-    return m
+		if !m.ContainsIds(edge.dst.Id) {
+			m.AddNodes(NewNode(edge.dst.Id))
+		}
+
+		src, _ := m.Nodes[edge.src.Id]
+		dst, _ := m.Nodes[edge.dst.Id]
+
+		src.AddEdges(dst)
+	}
+
+	return m
 }
 
-func (g *Graph) GetEdges() (chan *Edge) {
-    edges := make(chan *Edge)
-    
-    go func() {
-        defer close(edges)
-        
-        for _, node := range g.Nodes {
-            for _, next := range node.Nodes {
-                edges <- &Edge{node, next}
-            }
-        }
-    }()        
-    
-    return edges
+func (g *Graph) GetEdges() chan *Edge {
+	edges := make(chan *Edge)
+
+	go func() {
+		defer close(edges)
+
+		for _, node := range g.Nodes {
+			for _, next := range node.Nodes {
+				edges <- &Edge{node, next}
+			}
+		}
+	}()
+
+	return edges
 }
 
 // Reverse all the edges in a graph
@@ -108,11 +106,11 @@ func reverse(node *Node) {
 
 	for _, next := range expandNode(node) {
 		reverse(next)
-		
+
 		// Only reverse directed edges
 		if !next.Adjacent(node) {
-		    next.AddEdges(node)
-		    node.RemoveEdges(next)
+			next.AddEdges(node)
+			node.RemoveEdges(next)
 		}
 	}
 }
