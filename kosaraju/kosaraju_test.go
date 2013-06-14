@@ -1,8 +1,8 @@
 package kosaraju
 
 import (
-	"testing"
 	"github.com/mattomatic/go-graph/graph"
+	"testing"
 )
 
 func TestKosaraju(t *testing.T) {

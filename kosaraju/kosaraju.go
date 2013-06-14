@@ -1,7 +1,7 @@
 package kosaraju
 
 import (
-    "github.com/mattomatic/go-graph/graph"
+	"github.com/mattomatic/go-graph/graph"
 )
 
 func Kosaraju(g *graph.Graph) chan *graph.Graph {
