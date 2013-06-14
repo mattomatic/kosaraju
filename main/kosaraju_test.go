@@ -1,17 +1,18 @@
-package graph
+package main
 
 import (
 	"testing"
+	"github.com/mattomatic/go-graph/graph"
 )
 
 func TestKosaraju(t *testing.T) {
-	a := NewNode(1)
-	b := NewNode(2)
-	c := NewNode(3)
+	a := graph.NewNode(1)
+	b := graph.NewNode(2)
+	c := graph.NewNode(3)
 
-	d := NewNode(4)
-	e := NewNode(5)
-	f := NewNode(6)
+	d := graph.NewNode(4)
+	e := graph.NewNode(5)
+	f := graph.NewNode(6)
 
 	a.AddEdges(b)
 	b.AddEdges(c)
@@ -21,9 +22,9 @@ func TestKosaraju(t *testing.T) {
 	e.AddEdges(f)
 	f.AddEdges(d)
 
-	g := NewGraph(a, b, c, d, e, f)
+	g := graph.NewGraph(a, b, c, d, e, f)
 
-	sccs := g.Kosaraju()
+	sccs := Kosaraju(g)
 	scc1 := <-sccs
 	scc2 := <-sccs
 
@@ -37,12 +38,12 @@ func TestKosaraju(t *testing.T) {
 }
 
 func TestKosarajuTwo(t *testing.T) {
-	a := NewNode(1)
-	b := NewNode(2)
-	c := NewNode(3)
-	d := NewNode(4)
-	e := NewNode(5)
-	f := NewNode(6)
+	a := graph.NewNode(1)
+	b := graph.NewNode(2)
+	c := graph.NewNode(3)
+	d := graph.NewNode(4)
+	e := graph.NewNode(5)
+	f := graph.NewNode(6)
 
 	a.AddEdges(b)
 	b.AddEdges(c)
@@ -56,8 +57,8 @@ func TestKosarajuTwo(t *testing.T) {
 	a.AddEdges(e)
 	a.AddEdges(f)
 
-	g := NewGraph(a, b, c, d, e, f)
-	sccs := g.Kosaraju()
+	g := graph.NewGraph(a, b, c, d, e, f)
+	sccs := Kosaraju(g)
 	scc1 := <-sccs
 	scc2 := <-sccs
 
@@ -71,12 +72,12 @@ func TestKosarajuTwo(t *testing.T) {
 }
 
 func TestSimple(t *testing.T) {
-	a := NewNode(1)
-	b := NewNode(2)
-	c := NewNode(3)
-	d := NewNode(4)
-	e := NewNode(5)
-	f := NewNode(6)
+	a := graph.NewNode(1)
+	b := graph.NewNode(2)
+	c := graph.NewNode(3)
+	d := graph.NewNode(4)
+	e := graph.NewNode(5)
+	f := graph.NewNode(6)
 
 	a.AddEdges(b)
 	b.AddEdges(c)
@@ -88,9 +89,9 @@ func TestSimple(t *testing.T) {
 
 	a.AddEdges(d)
 
-	g := NewGraph(a, b, c, d, e, f)
+	g := graph.NewGraph(a, b, c, d, e, f)
 
-	expected := [...]*Node{d, f, e, a, c, b}
+	expected := [...]*graph.Node{d, f, e, a, c, b}
 	ordering := computeOrdering(g)
 
 	for i := 0; i < len(expected); i++ {
@@ -100,7 +101,7 @@ func TestSimple(t *testing.T) {
 	}
 }
 
-func isComponent(g *Graph, nodes ...*Node) bool {
+func isComponent(g *graph.Graph, nodes ...*graph.Node) bool {
 	if len(g.Nodes) != len(nodes) {
 		return false
 	}
