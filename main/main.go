@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/mattomatic/go-graph/graph"
+	"github.com/mattomatic/kosaraju/kosaraju"
 	"sort"
 	"time"
 )
@@ -34,7 +35,7 @@ func main() {
 	graphTimer := time.Now().Sub(graphTime)
 
 	sccTime := time.Now()
-	sccs := Kosaraju(g)
+	sccs := kosaraju.Kosaraju(g)
 
 	lengths := make([]int, 0)
 	for scc := range sccs {
