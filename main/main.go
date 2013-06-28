@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/mattomatic/go-graph/graph"
+	"github.com/mattomatic/kosaraju/graph"
 	"github.com/mattomatic/kosaraju/kosaraju"
 	"sort"
 	"time"
